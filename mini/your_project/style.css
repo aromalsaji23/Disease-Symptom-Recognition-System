@@ -1,0 +1,92 @@
+/* style.css */
+
+/* Global Styles */
+body {
+    background-color: #f0f2f6;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #cacfc9;
+    font-family: 'Roboto Slab', serif;
+}
+
+.stApp {
+    padding: 20px;
+}
+
+/* Header Styles */
+.stApp header {
+    background: #32e3dd;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+/* Input Box Styles */
+.stSelectbox {
+    margin-bottom: 20px;
+}
+
+.stSelectbox label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.stSelectbox div[data-baseweb="select"] {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Button Styles */
+.stButton > button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.stButton > button:hover {
+    background-color: #45a049;
+}
+
+/* Prediction Result Styles */
+.prediction-result {
+    margin-top: 20px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stApp {
+        padding: 10px;
+    }
+
+    .stButton > button {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .stSelectbox div[data-baseweb="select"] {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
