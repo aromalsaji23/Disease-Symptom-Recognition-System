@@ -1,48 +1,29 @@
-import streamlit as st
+import os
 import pickle
-import numpy as np
+import streamlit as st
 import pandas as pd
 
+# Determine the absolute path
+base_path = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(base_path, 'models', 'model.pkl')
+scaler_path = os.path.join(base_path, 'models', 'scaler.pkl')
+le_path = os.path.join(base_path, 'models', 'label_encoder.pkl')
+le_prognosis_path = os.path.join(base_path, 'models', 'label_encoder_prognosis.pkl')
+
 # Load the model, scaler, and label encoders
-with open('models/model.pkl', 'rb') as model_file:
+with open(model_path, 'rb') as model_file:
     model = pickle.load(model_file)
 
-with open('models/scaler.pkl', 'rb') as scaler_file:
+with open(scaler_path, 'rb') as scaler_file:
     scaler = pickle.load(scaler_file)
 
-with open('models/label_encoder.pkl', 'rb') as le_file:
+with open(le_path, 'rb') as le_file:
     le = pickle.load(le_file)
 
-with open('models/label_encoder_prognosis.pkl', 'rb') as le_prognosis_file:
+with open(le_prognosis_path, 'rb') as le_prognosis_file:
     le_prognosis = pickle.load(le_prognosis_file)
 
-# Preprocess input function
-def preprocess_input(input_data, scaler, le):
-    # Convert input_data to DataFrame with appropriate columns
-    columns = [
-        'itching', 'skin_rash', 'nodal_skin_eruptions',
-        'continuous_sneezing', 'shivering', 'chills',
-        'joint_pain', 'stomach_pain', 'acidity',
-        'ulcers_on_tongue'
-    ]
-    
-    input_data_df = pd.DataFrame([input_data], columns=columns)
-    
-    # Encode categorical features
-    for feature in columns:
-        if feature in input_data_df.columns:
-            input_data_df[feature] = le.transform(input_data_df[feature].astype(str))
-    
-    # Standardize numerical features if any (none in this case)
-    input_data_scaled = scaler.transform(input_data_df)
-    
-    return input_data_scaled
-
-# Load custom CSS
-with open('style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-# Streamlit app title
+# Streamlit app content
 st.title('Disease Symptom Recognizer')
 
 # Input fields for user
@@ -59,7 +40,6 @@ ulcers_on_tongue = st.selectbox('Ulcers on Tongue', ['Yes', 'No'])
 
 # Button to predict
 if st.button('Predict'):
-    # Convert 'Yes'/'No' to 1/0
     input_data = [
         int(itching == 'Yes'),
         int(skin_rash == 'Yes'),
@@ -73,11 +53,18 @@ if st.button('Predict'):
         int(ulcers_on_tongue == 'Yes'),
     ]
     
+    input_data_df = pd.DataFrame([input_data], columns=[
+        'itching', 'skin_rash', 'nodal_skin_eruptions',
+        'continuous_sneezing', 'shivering', 'chills',
+        'joint_pain', 'stomach_pain', 'acidity',
+        'ulcers_on_tongue'
+    ])
+    
     # Preprocess the input data
-    input_data_processed = preprocess_input(input_data, scaler, le)
+    input_data_scaled = scaler.transform(input_data_df)
     
     # Make a prediction
-    prediction = model.predict(input_data_processed)
+    prediction = model.predict(input_data_scaled)
     
     # Decode the prediction
     prediction_decoded = le_prognosis.inverse_transform(prediction)
